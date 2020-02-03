@@ -8,15 +8,14 @@ const getName = () => {
 const addNotes = (title, body) => {
 
     const notes = loadNotes()
-
+    // duplicate notes
+    // filter
     const duplicateNotes = notes.filter(function (note) {
         return note.title === title
     })
-
     // kalau gk ada data ducplicate
     // berarti boleh push ke datajson
     if (duplicateNotes.length === 0) {
-
         // push ke dalam array
         notes.push({
             title: title,
@@ -24,7 +23,7 @@ const addNotes = (title, body) => {
         })
 
         saveNotes(notes)
-        console.log('new note added')
+        console.log(chalk.bgGreen.red('Note has been edited'))
 
     } else {
         // ada duplicate
@@ -32,6 +31,19 @@ const addNotes = (title, body) => {
 
     }
 
+
+}
+
+const removeNotes = (title) => {
+
+    // load existing note
+    const notes = loadNotes()
+
+    const notesToKeep = notes.filter(function (note) {
+        // kalau note tidak sama sama yang mau di hapus
+        return note.title !== title
+    })
+    saveNotes(notesToKeep);
 
 }
 
@@ -51,12 +63,14 @@ const loadNotes = () => {
         // menconvert data string menjadi javascript object
         return JSON.parse(dataJson)
     } catch (error) {
-
+        // kalo filenya gk ada
+        // simpan ke array kosong
         return []
     }
 }
 
 module.exports = {
     getName: getName,
-    addNotes: addNotes
+    addNotes: addNotes,
+    removeNotes: removeNotes
 }
