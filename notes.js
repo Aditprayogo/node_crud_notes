@@ -10,7 +10,7 @@ const addNotes = (title, body) => {
     const notes = loadNotes()
     // duplicate notes
     // filter
-    const duplicateNotes = notes.filter(function (note) {
+    const duplicateNotes = notes.filter((note) => {
         return note.title === title
     })
     // kalau gk ada data ducplicate
@@ -34,17 +34,49 @@ const addNotes = (title, body) => {
 
 }
 
+const listNotes = () => {
+
+    //load the fucing notes
+    const notes = loadNotes()
+
+    notes.forEach((note) => {
+        console.log(chalk.green('Title is ' + note.title))
+    })
+
+}
+
+const readNotes = (title) => {
+
+    const notes = loadNotes()
+
+    const matchesNote = notes.filter((note) => {
+        return note.title === title
+    })
+
+    matchesNote.forEach((note) => {
+        console.log(chalk.green('Title : ' + note.title))
+        console.log(chalk.yellow('Body : ' + note.body))
+    })
+
+
+
+}
+
 const removeNotes = (title) => {
 
     // load existing note
     const notes = loadNotes()
 
-    const notesToKeep = notes.filter(function (note) {
-        // kalau note tidak sama sama yang mau di hapus
+    const notesToKeep = notes.filter((note) => {
         return note.title !== title
     })
-    saveNotes(notesToKeep);
 
+    if (notes.length > notesToKeep.length) {
+
+        console.log(chalk.bgGreen.black('Note has been removed'))
+        saveNotes(notesToKeep);
+
+    }
 }
 
 const saveNotes = (notes) => {
@@ -56,6 +88,7 @@ const saveNotes = (notes) => {
 }
 
 const loadNotes = () => {
+
     try {
         const dataBuffer = fs.readFileSync('notes.json')
         const dataJson = dataBuffer.toString()
@@ -72,5 +105,7 @@ const loadNotes = () => {
 module.exports = {
     getName: getName,
     addNotes: addNotes,
-    removeNotes: removeNotes
+    removeNotes: removeNotes,
+    listNotes: listNotes,
+    readNotes: readNotes
 }
